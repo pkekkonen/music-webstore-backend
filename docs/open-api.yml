@@ -289,6 +289,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Order'
+        '404':
+          description: No user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
     post:
       tags: 
         - orders
@@ -319,6 +325,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error400'
+        '404':
+          description: No user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
 
   /users/{userId}/orders/{id}:
     get:
@@ -428,11 +440,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error404'
 
-  /order_lines:
+  /orders/{orderId}/products/{productId}/orderlines:
     get:
       tags: 
         - order_lines
       summary: Get all order lines
+      parameters:
+        - name: orderId
+          in: path
+          description: The ID of the order
+          required: true
+          schema:
+            type: integer
+        - name: productId
+          in: path
+          description: The ID of the product
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description:  Successfully got all the order lines
@@ -442,10 +467,29 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/OrderLine'
+        '404':
+          description: No order or product with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
     post:
       tags: 
         - order_lines
       summary: Create a new order line
+      parameters:
+        - name: orderId
+          in: path
+          description: The ID of the order
+          required: true
+          schema:
+            type: integer
+        - name: productId
+          in: path
+          description: The ID of the product
+          required: true
+          schema:
+            type: integer
       requestBody:
         required: true
         content:
@@ -465,8 +509,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error400'
+        '404':
+          description: No order or product with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
 
-  /order_lines/{id}:
+  /orders/{orderId}/products/{productId}/order_lines/{id}:
     get:
       tags: 
         - order_lines
@@ -479,6 +529,18 @@ paths:
           required: true
           schema:
             type: integer
+        - name: orderId
+          in: path
+          description: The ID of the order
+          required: true
+          schema:
+            type: integer
+        - name: productId
+          in: path
+          description: The ID of the product
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: Successfully got the specified order line
@@ -487,7 +549,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrderLine'
         '404':
-          description: No order line with that ID found.
+          description: No order, product or order line with that ID found.
           content:
             application/json:
               schema:
@@ -502,6 +564,18 @@ paths:
         - name: id
           in: path
           description: The ID of the order line to update
+          required: true
+          schema:
+            type: integer
+        - name: orderId
+          in: path
+          description: The ID of the order
+          required: true
+          schema:
+            type: integer
+        - name: productId
+          in: path
+          description: The ID of the product
           required: true
           schema:
             type: integer
@@ -524,7 +598,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error400'
         '404':
-          description: No order line with that ID found.
+          description: No order, product or order line with that ID found.
           content:
             application/json:
               schema:
@@ -542,6 +616,19 @@ paths:
           required: true
           schema:
             type: integer
+        - name: orderId
+          in: path
+          description: The ID of the order
+          required: true
+          schema:
+            type: integer
+        - name: productId
+          in: path
+          description: The ID of the product
+          required: true
+          schema:
+            type: integer
+
       responses:
         '200':
           description: Successfully deleted the specified order line
@@ -550,7 +637,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrderLine'
         '404':
-          description: No order line with that ID found.
+          description: No order, product or order line with that ID found.
           content:
             application/json:
               schema:
@@ -582,6 +669,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Review'
+        '404':
+          description: No product or user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+                
     post:
       tags: 
         - reviews
@@ -618,6 +712,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error400'
+        '404':
+          description: No product or user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
 
   /products/{productId}/users/{userId}/reviews/{id}:
     get:
@@ -831,10 +931,17 @@ components:
         password:
           type: string
           description: The password of the user
+        role:
+          type: string
+          oneOf:
+            - title: ADMIN
+            - title: USER
+          description: The role of the user
       required:
         - name
         - email
         - password
+        - role
     UpdateUser:
       type: object
       properties:
@@ -847,6 +954,12 @@ components:
         password:
           type: string
           description: The password of the user
+        role:
+          type: string
+          oneOf:
+            - title: ADMIN
+            - title: USER
+          description: The role of the user
     User:
       type: object
       properties:
@@ -863,10 +976,17 @@ components:
         password:
           type: string
           description: The password of the user
+        role:
+          type: string
+          oneOf:
+            - title: ADMIN
+            - title: USER
+          description: The role of the user
       required:
         - name
         - email
         - password
+        - role
     CreateOrder:
       type: object
       properties:
@@ -901,28 +1021,14 @@ components:
     CreateOrderLine:
       type: object
       properties:
-        productId:
-          type: integer
-          description: The foreign key to the product in the order line
-        orderId:
-          type: integer
-          description: The foreign key to the order to which the order line belongs
         quantity:
           type: integer
           description: The quantity of the product in the order line
       required:
-        - productId
-        - orderId
         - quantity
     UpdateOrderLine:
       type: object
       properties:
-        productId:
-          type: integer
-          description: The foreign key to the product in the order line
-        orderId:
-          type: integer
-          description: The foreign key to the order to which the order line belongs
         quantity:
           type: integer
           description: The quantity of the product in the order line
