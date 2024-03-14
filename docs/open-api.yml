@@ -1,0 +1,1000 @@
+openapi: 3.0.0
+info:
+  title: Music Webstore API
+  description: API for managing a music webstore
+  version: 1.0.0
+servers:
+  - url: http://REPLACE_WITH_CORRECT_URL
+tags:
+  - name: products
+  - name: users
+  - name: orders
+  - name: order_lines
+  - name: reviews
+paths:
+  /products:
+    get:
+      tags: 
+        - products
+      summary: Get all products
+      responses:
+        '200':
+          description:  Successfully got all the products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      tags: 
+        - products
+      summary: Create a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProduct'
+      responses:
+        '201':
+          description: Successfully created the product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Could not create a new product, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+
+  /products/{id}:
+    get:
+      tags: 
+        - products
+      summary: Get a specified product
+      operationId: getProduct
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the product to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully got the specified product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: No product with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    put:
+      tags:
+        - products
+      summary: Update a product
+      description: Update an existing product. Any combination of fields may be provided.
+      operationId: updateProduct
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the product to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProduct'
+      responses:
+        '200':
+          description: Successfully updated the specified product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Could not update the product, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: No product with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    delete:
+      tags:
+        - products
+      summary: Delete a product
+      description: Delete an existing product.
+      operationId: deleteProduct
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the product to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: No product with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+
+  /users:
+    get:
+      tags: 
+        - users
+      summary: Get all users
+      responses:
+        '200':
+          description:  Successfully got all the users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      tags: 
+        - users
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        '201':
+          description: Successfully created the user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Could not create a new user, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+
+  /users/{id}:
+    get:
+      tags: 
+        - users
+      summary: Get a specified user
+      operationId: getUser
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the user to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully got the specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: No user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    put:
+      tags:
+        - users
+      summary: Update a user
+      description: Update an existing user. Any combination of fields may be provided.
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the user to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+      responses:
+        '200':
+          description: Successfully updated the specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Could not update the user, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: No user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    delete:
+      tags:
+        - users
+      summary: Delete a user
+      description: Delete an existing user.
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the user to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: No user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+
+  /users/{userId}/orders:
+    get:
+      tags: 
+        - orders
+      summary: Get all orders
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user to get all the orders for
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description:  Successfully got all the orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+    post:
+      tags: 
+        - orders
+      summary: Create a new order
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user to create an order for
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrder'
+      responses:
+        '201':
+          description: Successfully created the order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Could not create a new order, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+
+  /users/{userId}/orders/{id}:
+    get:
+      tags: 
+        - orders
+      summary: Get a specified order
+      operationId: getOrder
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the order to get
+          required: true
+          schema:
+            type: integer
+        - name: userId
+          in: path
+          description: The ID of the user to get an order for
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully got the specified order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: No order or user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    put:
+      tags:
+        - orders
+      summary: Update an order
+      description: Update an existing order. Any combination of fields may be provided.
+      operationId: updateOrder
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the order to update
+          required: true
+          schema:
+            type: integer
+        - name: userId
+          in: path
+          description: The ID of the user to update an order for
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrder'
+      responses:
+        '200':
+          description: Successfully updated the specified order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Could not update the order, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: No order or user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    delete:
+      tags:
+        - orders
+      summary: Delete an order
+      description: Delete an existing order.
+      operationId: deleteOrder
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the order to delete
+          required: true
+          schema:
+            type: integer
+        - name: userId
+          in: path
+          description: The ID of the user to delete an order for
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: No order or user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+
+  /order_lines:
+    get:
+      tags: 
+        - order_lines
+      summary: Get all order lines
+      responses:
+        '200':
+          description:  Successfully got all the order lines
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderLine'
+    post:
+      tags: 
+        - order_lines
+      summary: Create a new order line
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderLine'
+      responses:
+        '201':
+          description: Successfully created the order line
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderLine'
+        '400':
+          description: Could not create a new order line, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+
+  /order_lines/{id}:
+    get:
+      tags: 
+        - order_lines
+      summary: Get a specified order line
+      operationId: getOrderLine
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the order line to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully got the specified order line
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderLine'
+        '404':
+          description: No order line with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    put:
+      tags:
+        - order_lines
+      summary: Update an order line
+      description: Update an existing order line. Any combination of fields may be provided.
+      operationId: updateOrderLine
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the order line to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrderLine'
+      responses:
+        '200':
+          description: Successfully updated the specified order line
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderLine'
+        '400':
+          description: Could not update the order line, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: No order line with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    delete:
+      tags:
+        - order_lines
+      summary: Delete an order line
+      description: Delete an existing order line.
+      operationId: deleteOrderLine
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the order line to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified order line
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderLine'
+        '404':
+          description: No order line with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+  /products/{productId}/users/{userId}/reviews:
+    get:
+      tags: 
+        - reviews
+      summary: Get all reviews
+      parameters:
+        - name: productId
+          in: path
+          description: The ID of the product to get all the reviews for
+          required: true
+          schema:
+            type: integer
+        - name: userId
+          in: path
+          description: The ID of the user to get all the reviews for
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description:  Successfully got all the reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+    post:
+      tags: 
+        - reviews
+      summary: Create a new review
+      parameters:
+        - name: productId
+          in: path
+          description: The ID of the product to get all the reviews for
+          required: true
+          schema:
+            type: integer
+        - name: userId
+          in: path
+          description: The ID of the user to create an review for
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReview'
+      responses:
+        '201':
+          description: Successfully created the review
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '400':
+          description: Could not create a new review, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+
+  /products/{productId}/users/{userId}/reviews/{id}:
+    get:
+      tags: 
+        - reviews
+      summary: Get a specified review
+      operationId: getReview
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the review to get
+          required: true
+          schema:
+            type: integer
+        - name: productId
+          in: path
+          description: The ID of the product to get all the reviews for
+          required: true
+          schema:
+            type: integer
+        - name: userId
+          in: path
+          description: The ID of the user to get an review for
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully got the specified review
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '404':
+          description: No review, product or user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    put:
+      tags:
+        - reviews
+      summary: Update an review
+      description: Update an existing review. Any combination of fields may be provided.
+      operationId: updateReview
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the review to update
+          required: true
+          schema:
+            type: integer
+        - name: productId
+          in: path
+          description: The ID of the product to get all the reviews for
+          required: true
+          schema:
+            type: integer
+        - name: userId
+          in: path
+          description: The ID of the user to update an review for
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateReview'
+      responses:
+        '200':
+          description: Successfully updated the specified review
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '400':
+          description: Could not update the review, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: No review, product or user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    delete:
+      tags:
+        - reviews
+      summary: Delete an review
+      description: Delete an existing review.
+      operationId: deleteReview
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the review to delete
+          required: true
+          schema:
+            type: integer
+        - name: productId
+          in: path
+          description: The ID of the product to get all the reviews for
+          required: true
+          schema:
+            type: integer
+        - name: userId
+          in: path
+          description: The ID of the user to delete an review for
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified review
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '404':
+          description: No review, product or user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the product
+        companyId:
+          type: integer
+          description: The foreign key to the company that produces the product
+        artistId:
+          type: integer
+          description: The foreign key to the artist associated with the product
+        title:
+          type: string
+          description: The title of the product
+        releaseYear:
+          type: string
+          description: The release year of the product
+        price:
+          type: number
+          format: double
+          description: The price of the product
+      required:
+        - companyId
+        - artistId
+        - title
+        - releaseYear
+        - price
+    CreateProduct:
+      type: object
+      properties:
+        companyId:
+          type: integer
+          description: The foreign key to the company that produces the product
+        artistId:
+          type: integer
+          description: The foreign key to the artist associated with the product
+        title:
+          type: string
+          description: The title of the product
+        releaseYear:
+          type: string
+          description: The release year of the product
+        price:
+          type: number
+          format: double
+          description: The price of the product
+      required:
+        - companyId
+        - artistId
+        - title
+        - releaseYear
+        - price
+    UpdateProduct:
+      type: object
+      properties:
+        companyId:
+          type: integer
+          description: The foreign key to the company that produces the product
+        artistId:
+          type: integer
+          description: The foreign key to the artist associated with the product
+        title:
+          type: string
+          description: The title of the product
+        releaseYear:
+          type: string
+          description: The release year of the product
+        price:
+          type: number
+          format: double
+          description: The price of the product
+    CreateUser:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the user
+        email:
+          type: string
+          description: The email address of the user
+        password:
+          type: string
+          description: The password of the user
+      required:
+        - name
+        - email
+        - password
+    UpdateUser:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the user
+        email:
+          type: string
+          description: The email address of the user
+        password:
+          type: string
+          description: The password of the user
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the user
+        name:
+          type: string
+          description: The name of the user
+        email:
+          type: string
+          description: The email address of the user
+        password:
+          type: string
+          description: The password of the user
+      required:
+        - name
+        - email
+        - password
+    CreateOrder:
+      type: object
+      properties:
+        date:
+          type: string
+          description: The date the order was placed
+      required:
+        - userId
+        - date
+    UpdateOrder:
+      type: object
+      properties:
+        date:
+          type: string
+          description: The date the order was placed
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the order
+        userId:
+          type: integer
+          description: The foreign key to the user who placed the order
+        date:
+          type: string
+          description: The date the order was placed
+      required:
+        - userId
+        - date
+    CreateOrderLine:
+      type: object
+      properties:
+        productId:
+          type: integer
+          description: The foreign key to the product in the order line
+        orderId:
+          type: integer
+          description: The foreign key to the order to which the order line belongs
+        quantity:
+          type: integer
+          description: The quantity of the product in the order line
+      required:
+        - productId
+        - orderId
+        - quantity
+    UpdateOrderLine:
+      type: object
+      properties:
+        productId:
+          type: integer
+          description: The foreign key to the product in the order line
+        orderId:
+          type: integer
+          description: The foreign key to the order to which the order line belongs
+        quantity:
+          type: integer
+          description: The quantity of the product in the order line
+    OrderLine:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the order line
+        productId:
+          type: integer
+          description: The foreign key to the product in the order line
+        orderId:
+          type: integer
+          description: The foreign key to the order to which the order line belongs
+        quantity:
+          type: integer
+          description: The quantity of the product in the order line
+      required:
+        - productId
+        - orderId
+        - quantity
+    CreateReview:
+      type: object
+      properties:
+        content:
+          type: integer
+          description: The content of the review
+      required:
+        - productId
+        - userId
+        - content
+    UpdateReview:
+      type: object
+      properties:
+        content:
+          type: integer
+          description: The content of the review
+    Review:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the review
+        content:
+          type: integer
+          description: The content of the review
+      required:
+        - content
+    Error400:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "error"
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "bad request"
+    Error404:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "error"
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "not found"
