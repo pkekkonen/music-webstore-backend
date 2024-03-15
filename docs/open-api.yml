@@ -11,10 +11,11 @@ tags:
   - name: orders
   - name: order_lines
   - name: reviews
+  - name: genres
 paths:
   /products:
     get:
-      tags: 
+      tags:
         - products
       summary: Get all products
       responses:
@@ -27,7 +28,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Product'
     post:
-      tags: 
+      tags:
         - products
       summary: Create a new product
       requestBody:
@@ -52,7 +53,7 @@ paths:
 
   /products/{id}:
     get:
-      tags: 
+      tags:
         - products
       summary: Get a specified product
       operationId: getProduct
@@ -142,7 +143,7 @@ paths:
 
   /users:
     get:
-      tags: 
+      tags:
         - users
       summary: Get all users
       responses:
@@ -155,7 +156,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/User'
     post:
-      tags: 
+      tags:
         - users
       summary: Create a new user
       requestBody:
@@ -180,7 +181,7 @@ paths:
 
   /users/{id}:
     get:
-      tags: 
+      tags:
         - users
       summary: Get a specified user
       operationId: getUser
@@ -270,7 +271,7 @@ paths:
 
   /users/{userId}/orders:
     get:
-      tags: 
+      tags:
         - orders
       summary: Get all orders
       parameters:
@@ -296,7 +297,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error404'
     post:
-      tags: 
+      tags:
         - orders
       summary: Create a new order
       parameters:
@@ -334,7 +335,7 @@ paths:
 
   /users/{userId}/orders/{id}:
     get:
-      tags: 
+      tags:
         - orders
       summary: Get a specified order
       operationId: getOrder
@@ -442,7 +443,7 @@ paths:
 
   /orders/{orderId}/products/{productId}/orderlines:
     get:
-      tags: 
+      tags:
         - order_lines
       summary: Get all order lines
       parameters:
@@ -474,7 +475,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error404'
     post:
-      tags: 
+      tags:
         - order_lines
       summary: Create a new order line
       parameters:
@@ -518,7 +519,7 @@ paths:
 
   /orders/{orderId}/products/{productId}/order_lines/{id}:
     get:
-      tags: 
+      tags:
         - order_lines
       summary: Get a specified order line
       operationId: getOrderLine
@@ -644,7 +645,7 @@ paths:
                 $ref: '#/components/schemas/Error404'
   /products/{productId}/users/{userId}/reviews:
     get:
-      tags: 
+      tags:
         - reviews
       summary: Get all reviews
       parameters:
@@ -675,9 +676,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error404'
-                
+
     post:
-      tags: 
+      tags:
         - reviews
       summary: Create a new review
       parameters:
@@ -721,7 +722,7 @@ paths:
 
   /products/{productId}/users/{userId}/reviews/{id}:
     get:
-      tags: 
+      tags:
         - reviews
       summary: Get a specified review
       operationId: getReview
@@ -840,6 +841,517 @@ paths:
                 $ref: '#/components/schemas/Review'
         '404':
           description: No review, product or user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+  /genres:
+    get:
+      tags:
+        - genres
+      summary: Get all genres
+      responses:
+        '200':
+          description:  Successfully got all the genres
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genre'
+    post:
+      tags:
+        - genres
+      summary: Create a new genre
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGenre'
+      responses:
+        '201':
+          description: Successfully created the genre
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+        '400':
+          description: Could not create a new genre, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+
+  /genres/{id}:
+    get:
+      tags:
+        - genres
+      summary: Get a specified genre
+      operationId: getGenre
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the genre to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully got the specified genre
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+        '404':
+          description: No genre with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    put:
+      tags:
+        - genres
+      summary: Update a genre
+      description: Update an existing genre. Any combination of fields may be provided.
+      operationId: updateGenre
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the genre to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateGenre'
+      responses:
+        '200':
+          description: Successfully updated the specified genre
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+        '400':
+          description: Could not update the genre, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: No genre with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    delete:
+      tags:
+        - genres
+      summary: Delete a genre
+      description: Delete an existing genre.
+      operationId: deleteGenre
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the genre to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified genre
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+        '404':
+          description: No genre with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+
+  /products_genres:
+    get:
+      tags:
+        - products_genres
+      summary: Get all product-genre associations
+      responses:
+        '200':
+          description:  Successfully got all the product-genre associations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductGenre'
+    post:
+      tags:
+        - products_genres
+      summary: Create a new product-genre association
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductGenre'
+      responses:
+        '201':
+          description: Successfully created the product-genre association
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGenre'
+        '400':
+          description: Could not create a new product-genre association, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+
+  /products_genres/{id}:
+    get:
+      tags:
+        - products_genres
+      summary: Get a specified product-genre association
+      operationId: getProductGenre
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the product-genre association to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully got the specified product-genre association
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGenre'
+        '404':
+          description: No product-genre association with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    put:
+      tags:
+        - products_genres
+      summary: Update a product-genre association
+      description: Update an existing product-genre association. Any combination of fields may be provided.
+      operationId: updateProductGenre
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the product-genre association to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductGenre'
+      responses:
+        '200':
+          description: Successfully updated the specified product-genre association
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGenre'
+        '400':
+          description: Could not update the product-genre association, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: No product-genre association with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    delete:
+      tags:
+        - products_genres
+      summary: Delete a product-genre association
+      description: Delete an existing product-genre association.
+      operationId: deleteProductGenre
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the product-genre association to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified product-genre association
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGenre'
+        '404':
+          description: No product-genre association with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+
+  /record_companies:
+    get:
+      tags:
+        - record_companies
+      summary: Get all record companies
+      responses:
+        '200':
+          description:  Successfully got all the record companies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecordCompany'
+    post:
+      tags:
+        - record_companies
+      summary: Create a new record company
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRecordCompany'
+      responses:
+        '201':
+          description: Successfully created the record company
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordCompany'
+        '400':
+          description: Could not create a new record company, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+
+  /record_companies/{id}:
+    get:
+      tags:
+        - record_companies
+      summary: Get a specified record company
+      operationId: getRecordCompany
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the record company to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully got the specified record company
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordCompany'
+        '404':
+          description: No record company with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    put:
+      tags:
+        - record_companies
+      summary: Update a record company
+      description: Update an existing record company. Any combination of fields may be provided.
+      operationId: updateRecordCompany
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the record company to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRecordCompany'
+      responses:
+        '200':
+          description: Successfully updated the specified record company
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordCompany'
+        '400':
+          description: Could not update the record company, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: No record company with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    delete:
+      tags:
+        - record_companies
+      summary: Delete a record company
+      description: Delete an existing record company.
+      operationId: deleteRecordCompany
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the record company to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified record company
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordCompany'
+        '404':
+          description: No record company with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+
+  /artists:
+    get:
+      tags:
+        - artists
+      summary: Get all artists
+      responses:
+        '200':
+          description:  Successfully got all the artists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Artist'
+    post:
+      tags:
+        - artists
+      summary: Create a new artist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateArtist'
+      responses:
+        '201':
+          description: Successfully created the artist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artist'
+        '400':
+          description: Could not create a new artist, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+
+  /artists/{id}:
+    get:
+      tags:
+        - artists
+      summary: Get a specified artist
+      operationId: getArtist
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the artist to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully got the specified artist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artist'
+        '404':
+          description: No artist with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    put:
+      tags:
+        - artists
+      summary: Update an artist
+      description: Update an existing artist. Any combination of fields may be provided.
+      operationId: updateArtist
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the artist to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateArtist'
+      responses:
+        '200':
+          description: Successfully updated the specified artist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artist'
+        '400':
+          description: Could not update the artist, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: No artist with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    delete:
+      tags:
+        - artists
+      summary: Delete an artist
+      description: Delete an existing artist.
+      operationId: deleteArtist
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the artist to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified artist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artist'
+        '404':
+          description: No artist with that ID found.
           content:
             application/json:
               schema:
@@ -1080,6 +1592,130 @@ components:
           description: The content of the review
       required:
         - content
+    Genre:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      required:
+        - name
+    CreateGenre:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+    UpdateGenre:
+      type: object
+      properties:
+        name:
+          type: string
+    ProductGenre:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        product_id:
+          type: integer
+          format: int64
+        genre_id:
+          type: integer
+          format: int64
+      required:
+        - product_id
+        - genre_id
+    CreateProductGenre:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          format: int64
+        genre_id:
+          type: integer
+          format: int64
+      required:
+        - product_id
+        - genre_id
+    UpdateProductGenre:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          format: int64
+        genre_id:
+          type: integer
+          format: int64
+    RecordCompany:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      required:
+        - name
+    CreateRecordCompany:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+    UpdateRecordCompany:
+      type: object
+      properties:
+        name:
+          type: string
+    Artist:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        birth_date:
+          type: string
+          format: date
+        record_company_id:
+          type: integer
+          format: int64
+      required:
+        - name
+        - birth_date
+        - record_company_id
+    CreateArtist:
+      type: object
+      properties:
+        name:
+          type: string
+        birth_date:
+          type: string
+          format: date
+        record_company_id:
+          type: integer
+          format: int64
+      required:
+        - name
+        - birth_date
+        - record_company_id
+    UpdateArtist:
+      type: object
+      properties:
+        name:
+          type: string
+        birth_date:
+          type: string
+          format: date
+        record_company_id:
+          type: integer
+          format: int64
     Error400:
       type: object
       properties:
