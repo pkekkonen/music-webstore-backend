@@ -58,4 +58,9 @@ public class ProductsGenre {
     public ProductsGenre(int id) {
         this.id = id;
     }
+
+    public ProductsGenre(int productId, int genreId) {
+        this.product = new Product(productId);
+        this.genre = new Genre(genreId);
+    }
 }
