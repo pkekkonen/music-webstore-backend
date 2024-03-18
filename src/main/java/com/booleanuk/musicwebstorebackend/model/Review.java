@@ -31,6 +31,7 @@ public class Review {
     @Column
     private OffsetDateTime createdAt;
 
+
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @Column
     private OffsetDateTime updatedAt;

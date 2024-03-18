@@ -22,6 +22,7 @@ public class Role {
     @Column(name = "title")
     private String title;
 
+
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @Column
     private OffsetDateTime createdAt;

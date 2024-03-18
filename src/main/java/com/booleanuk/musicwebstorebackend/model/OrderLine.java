@@ -14,7 +14,6 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "order_lines")
 public class OrderLine {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

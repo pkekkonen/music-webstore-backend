@@ -36,13 +36,13 @@ public class Artist {
 //    private Product product;
 
 
-   public Artist(String name) {
-       this.name = name;
-   }
+    public Artist(String name) {
+        this.name = name;
+    }
 
-   public Artist(int id) {
-       this.id = id;
-   }
+    public Artist(int id) {
+        this.id = id;
+    }
 
     @PrePersist
     public void prePersist() {

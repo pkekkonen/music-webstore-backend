@@ -22,6 +22,7 @@ public class RecordCompany {
     @Column(name = "name")
     private String name;
 
+
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @Column
     private OffsetDateTime createdAt;
