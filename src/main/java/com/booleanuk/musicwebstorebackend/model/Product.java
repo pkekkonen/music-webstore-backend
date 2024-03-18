@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -35,34 +37,32 @@ public class Product {
     @Column
     private OffsetDateTime updatedAt;
 
-    //TODO: establish below connections to other tables when they are implemented
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "record_company_id", nullable = false)
+    @JsonIncludeProperties(value = {"id", "name"})
+    private RecordCompany recordCompany;
 
-//    @JsonIgnore
-//    @ManyToOne
-//    @JoinColumn(name = "record_company_id", nullable = false)
-//    @JsonIncludeProperties(value = {"id", "name"})
-//    private RecordCompany recordCompany;
-//
-//    @JsonIgnore
-//    @ManyToOne
-//    @JoinColumn(name = "artist_id", nullable = false)
-//    @JsonIncludeProperties(value = {"name"})
-//    private Artist artist;
-//
-//    @OneToMany(mappedBy = "product")
-//    @JsonIgnoreProperties("product")
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-//    private List<ProductGenre> productGenres;
-//
-//    @OneToMany(mappedBy = "product")
-//    @JsonIgnoreProperties("product")
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-//    private List<OrderLine> orderLines;
-//
-//    @OneToMany(mappedBy = "product")
-//    @JsonIgnoreProperties("product")
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-//    private List<Review> reviews;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "artist_id", nullable = false)
+    @JsonIncludeProperties(value = {"name"})
+    private Artist artist;
+
+    @OneToMany(mappedBy = "product")
+    @JsonIgnoreProperties("product")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<ProductsGenre> productGenre;
+
+    @OneToMany(mappedBy = "product")
+    @JsonIgnoreProperties("product")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<OrderLine> orderLines;
+
+    @OneToMany(mappedBy = "product")
+    @JsonIgnoreProperties("product")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<Review> reviews;
 
     @PrePersist
     public void prePersist() {
