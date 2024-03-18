@@ -12,8 +12,8 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "genres")
-public class Genre {
+@Table(name = "record_company")
+public class RecordCompany {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,15 +30,20 @@ public class Genre {
     @Column
     private OffsetDateTime updatedAt;
 
-//    @OneToMany(mappedBy = "genre")
-//    @JsonIgnoreProperties("genre")
+//    @OneToMany(mappedBy = "record_company")
+//    @JsonIgnoreProperties("record_company")
 //    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-//    private List<ProductGenre> productGenres;
+//    private Product product;
 
 
-    public Genre(String name) {
+    public RecordCompany(int id) {
+        this.id = id;
+    }
+
+    public RecordCompany(String name) {
         this.name = name;
     }
+
 
     @PrePersist
     public void prePersist() {
@@ -51,11 +56,4 @@ public class Genre {
     public void preUpdate() {
         updatedAt = OffsetDateTime.now();
     }
-
-    public Genre(int id) {
-        this.id = id;
-    }
-
-
 }
-
