@@ -36,7 +36,7 @@ public class Review {
     @Column
     private OffsetDateTime updatedAt;
 
-   /* @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties("review")
     @JsonIncludeProperties(value = {"name", "email", "password"})
@@ -48,7 +48,7 @@ public class Review {
     @JsonIncludeProperties(value = {"title", "release_year", "price"})
     private Product product;
 
-    */
+
 
     @PrePersist
     public void prePersist() {

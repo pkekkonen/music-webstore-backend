@@ -1,6 +1,6 @@
 package com.booleanuk.musicwebstorebackend.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -32,18 +33,18 @@ public class Order {
     @Column
     private OffsetDateTime updatedAt;
 
-    /*
+
     @OneToMany(mappedBy = "order")
     @JsonIgnoreProperties("order")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private OrderLine orderLine;
+    private List<OrderLine> orderLine;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIncludeProperties(value = {"name", "email", "password"})
     private User user;
-    */
+
 
     @PrePersist
     public void prePersist() {

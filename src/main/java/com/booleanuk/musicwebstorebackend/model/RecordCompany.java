@@ -1,12 +1,15 @@
 package com.booleanuk.musicwebstorebackend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -31,10 +34,10 @@ public class RecordCompany {
     @Column
     private OffsetDateTime updatedAt;
 
-//    @OneToMany(mappedBy = "record_company")
-//    @JsonIgnoreProperties("record_company")
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-//    private Product product;
+    @OneToMany(mappedBy = "record_company")
+    @JsonIgnoreProperties("record_company")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<Product> product;
 
 
     public RecordCompany(int id) {

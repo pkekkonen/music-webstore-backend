@@ -41,10 +41,10 @@ public class User {
     private OffsetDateTime updatedAt;
 
 
-    /* @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties("user")
     private List<Review> reviews;
-    */
+
 
 
     @PrePersist

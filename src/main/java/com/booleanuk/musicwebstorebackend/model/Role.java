@@ -32,9 +32,9 @@ public class Role {
     private OffsetDateTime updatedAt;
 
 
-    /*@OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role")
     private List<User> users;
-*/
+
 
 
     @PrePersist
