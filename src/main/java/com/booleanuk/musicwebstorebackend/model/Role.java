@@ -22,7 +22,6 @@ public class Role {
     @Column(name = "title")
     private String title;
 
-
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @Column
     private OffsetDateTime createdAt;
@@ -32,7 +31,7 @@ public class Role {
     private OffsetDateTime updatedAt;
 
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "roles")
     private List<User> users;
 
 
