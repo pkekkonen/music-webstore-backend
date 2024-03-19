@@ -49,7 +49,7 @@ public class User {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "role_id", nullable = false)
     @JsonIncludeProperties(value = {"id", "name", "email"})
     private Role role;
 

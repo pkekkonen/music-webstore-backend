@@ -12,6 +12,8 @@ tags:
   - name: order_lines
   - name: reviews
   - name: genres
+  - name: record_companies
+  - name: artists
 paths:
   /products:
     get:
@@ -972,135 +974,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error404'
-
-  /products_genres:
-    get:
-      tags:
-        - products_genres
-      summary: Get all product-genre associations
-      responses:
-        '200':
-          description:  Successfully got all the product-genre associations
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ProductGenre'
-    post:
-      tags:
-        - products_genres
-      summary: Create a new product-genre association
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateProductGenre'
-      responses:
-        '201':
-          description: Successfully created the product-genre association
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductGenre'
-        '400':
-          description: Could not create a new product-genre association, please check all fields are correct.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-
-  /products_genres/{id}:
-    get:
-      tags:
-        - products_genres
-      summary: Get a specified product-genre association
-      operationId: getProductGenre
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the product-genre association to get
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Successfully got the specified product-genre association
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductGenre'
-        '404':
-          description: No product-genre association with that ID found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-    put:
-      tags:
-        - products_genres
-      summary: Update a product-genre association
-      description: Update an existing product-genre association. Any combination of fields may be provided.
-      operationId: updateProductGenre
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the product-genre association to update
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProductGenre'
-      responses:
-        '200':
-          description: Successfully updated the specified product-genre association
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductGenre'
-        '400':
-          description: Could not update the product-genre association, please check all fields are correct.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '404':
-          description: No product-genre association with that ID found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-    delete:
-      tags:
-        - products_genres
-      summary: Delete a product-genre association
-      description: Delete an existing product-genre association.
-      operationId: deleteProductGenre
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the product-genre association to delete
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Successfully deleted the specified product-genre association
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductGenre'
-        '404':
-          description: No product-genre association with that ID found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-
   /record_companies:
     get:
       tags:
@@ -1365,72 +1238,86 @@ components:
           type: integer
           format: int64
           description: The unique identifier for the product
-        companyId:
-          type: integer
-          description: The foreign key to the company that produces the product
-        artistId:
-          type: integer
-          description: The foreign key to the artist associated with the product
         title:
           type: string
           description: The title of the product
+        artist:
+          type: string
+          description: The artist of the product
+        recordCompany:
+          type: string
+          description: The record company of the product
         releaseYear:
           type: string
           description: The release year of the product
         price:
           type: number
-          format: double
           description: The price of the product
+        genres:
+          type: array
+          items:
+            type: string
+          description: List of genres associated with the product
       required:
         - companyId
         - artistId
         - title
         - releaseYear
         - price
+        - genres
     CreateProduct:
       type: object
       properties:
-        companyId:
-          type: integer
-          description: The foreign key to the company that produces the product
-        artistId:
-          type: integer
-          description: The foreign key to the artist associated with the product
         title:
           type: string
           description: The title of the product
+        artist:
+          type: string
+          description: The artist of the product
+        recordCompany:
+          type: string
+          description: The record company of the product
         releaseYear:
           type: string
           description: The release year of the product
         price:
           type: number
-          format: double
           description: The price of the product
+        genres:
+          type: array
+          items:
+            type: string
+          description: List of genres associated with the product
       required:
         - companyId
         - artistId
         - title
         - releaseYear
         - price
+        - genres
     UpdateProduct:
       type: object
       properties:
-        companyId:
-          type: integer
-          description: The foreign key to the company that produces the product
-        artistId:
-          type: integer
-          description: The foreign key to the artist associated with the product
         title:
           type: string
           description: The title of the product
+        artist:
+          type: string
+          description: The artist of the product
+        recordCompany:
+          type: string
+          description: The record company of the product
         releaseYear:
           type: string
           description: The release year of the product
         price:
           type: number
-          format: double
           description: The price of the product
+        genres:
+          type: array
+          items:
+            type: string
+          description: List of genres associated with the product
     CreateUser:
       type: object
       properties:
@@ -1614,42 +1501,6 @@ components:
       properties:
         name:
           type: string
-    ProductGenre:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        product_id:
-          type: integer
-          format: int64
-        genre_id:
-          type: integer
-          format: int64
-      required:
-        - product_id
-        - genre_id
-    CreateProductGenre:
-      type: object
-      properties:
-        product_id:
-          type: integer
-          format: int64
-        genre_id:
-          type: integer
-          format: int64
-      required:
-        - product_id
-        - genre_id
-    UpdateProductGenre:
-      type: object
-      properties:
-        product_id:
-          type: integer
-          format: int64
-        genre_id:
-          type: integer
-          format: int64
     RecordCompany:
       type: object
       properties:
