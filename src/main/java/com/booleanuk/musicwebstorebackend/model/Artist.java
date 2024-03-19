@@ -36,7 +36,7 @@ public class Artist {
     @OneToMany(mappedBy = "artist")
     @JsonIgnoreProperties("artist")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private List<Product> product;
+    private List<Product> products;
 
 
     public Artist(String name) {

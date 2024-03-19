@@ -1680,39 +1680,28 @@ components:
           format: int64
         name:
           type: string
-        birth_date:
-          type: string
-          format: date
         record_company_id:
           type: integer
           format: int64
       required:
         - name
-        - birth_date
         - record_company_id
     CreateArtist:
       type: object
       properties:
         name:
           type: string
-        birth_date:
-          type: string
-          format: date
         record_company_id:
           type: integer
           format: int64
       required:
         - name
-        - birth_date
         - record_company_id
     UpdateArtist:
       type: object
       properties:
         name:
           type: string
-        birth_date:
-          type: string
-          format: date
         record_company_id:
           type: integer
           format: int64
