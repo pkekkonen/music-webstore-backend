@@ -23,14 +23,14 @@ public class Order {
     private int id;
 
     @Column(name = "date")
-    private DateTimeFormat date;
+    private OffsetDateTime date;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    @Column
+    @Column(name = "createdAt")
     private OffsetDateTime createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    @Column
+    @Column(name = "updatedAt")
     private OffsetDateTime updatedAt;
 
 
@@ -58,7 +58,7 @@ public class Order {
         updatedAt = OffsetDateTime.now();
     }
 
-    public Order(DateTimeFormat date) {
+    public Order(OffsetDateTime date) {
         this.date = date;
     }
 

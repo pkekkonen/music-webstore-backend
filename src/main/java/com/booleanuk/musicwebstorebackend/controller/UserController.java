@@ -21,7 +21,13 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
+
+    @Autowired
+    public UserController(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
     @GetMapping
         public ResponseEntity<Response<List<UserDTO>>> getAllProducts() {
             List<UserDTO> allProducts = this.userRepository.findAll().stream().map(userMapper::toDto).toList();
@@ -66,8 +72,8 @@ public class UserController {
         if(userUpdated.getPassword() != null ) {
             userToUpdate.setPassword(userUpdated.getPassword());
         }
-        if(userUpdated.getRoles() != null ) {
-            userToUpdate.setRoles(userUpdated.getRoles());
+        if(userUpdated.getRole() != null ) {
+            userToUpdate.setRole(userUpdated.getRole());
         }
 
 

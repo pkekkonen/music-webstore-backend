@@ -1,9 +1,10 @@
 package com.booleanuk.musicwebstorebackend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,11 +34,6 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties("user")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private List<String> roles;
-
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @Column
     private OffsetDateTime createdAt;
@@ -51,6 +47,11 @@ public class User {
     @JsonIgnoreProperties("user")
     private List<Review> reviews;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    @JsonIncludeProperties(value = {"id", "name", "email"})
+    private Role role;
 
     @PrePersist
     public void prePersist() {

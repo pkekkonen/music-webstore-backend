@@ -23,18 +23,16 @@ public class Role {
     private String title;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    @Column
+    @Column(name = "createdAt")
     private OffsetDateTime createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    @Column
+    @Column(name = "updatedAt")
     private OffsetDateTime updatedAt;
 
-
-    @OneToMany(mappedBy = "roles")
-    private List<User> users;
-
-
+    @OneToMany
+    @JoinColumn(name = "role_id")
+    private List<User> user;
 
     @PrePersist
     public void prePersist() {
