@@ -1,5 +1,6 @@
 package com.booleanuk.musicwebstorebackend.controller;
 
+import com.booleanuk.musicwebstorebackend.model.Artist;
 import com.booleanuk.musicwebstorebackend.model.User;
 import com.booleanuk.musicwebstorebackend.model.UserDTO;
 import com.booleanuk.musicwebstorebackend.repository.RoleRepository;
@@ -87,7 +88,7 @@ public class UserController {
     }
 
     private boolean containsNull(User user) {
-        return (user.getName() == null || user.getEmail() == null || user.getPassword() == null);
+        return (user.getName() == null || user.getEmail() == null || user.getPassword() == null || user.getRole() == null);
     }
 
     private User findUser(int id) {
