@@ -3,7 +3,6 @@ package com.booleanuk.musicwebstorebackend.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,28 +10,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "users")
-public class User {
-
+@Table(name = "order_lines")
+public class OrderLine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "password")
-    private String password;
+    @Column(name = "quantity")
+    private int quantity;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @Column
@@ -43,15 +33,18 @@ public class User {
     private OffsetDateTime updatedAt;
 
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties("user")
-    private List<Review> reviews;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    @JsonIgnoreProperties("order_line")
+    @JsonIncludeProperties(value = {"title", "release_year", "price"})
+    private Product product;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonIncludeProperties(value = {"id", "name", "email"})
-    private Role role;
+    @JoinColumn(name = "order_id", nullable = false)
+    @JsonIncludeProperties(value = {"id", "date"})
+    private Order order;
+
 
     @PrePersist
     public void prePersist() {
@@ -64,15 +57,4 @@ public class User {
     public void preUpdate() {
         updatedAt = OffsetDateTime.now();
     }
-
-    public User(int id) {
-        this.id = id;
-    }
-
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-
 }

@@ -2,8 +2,6 @@ package com.booleanuk.musicwebstorebackend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,28 +9,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "users")
-public class User {
-
+@Table(name = "products_genres")
+public class ProductsGenre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "password")
-    private String password;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @Column
@@ -43,15 +29,19 @@ public class User {
     private OffsetDateTime updatedAt;
 
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties("user")
-    private List<Review> reviews;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    @JsonIncludeProperties(value = {"id", "title", "release_year", "price"})
+    private Product product;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonIncludeProperties(value = {"id", "name", "email"})
-    private Role role;
+    @JoinColumn(name = "genre_id", nullable = false)
+    @JsonIncludeProperties(value = {"id", "name"})
+    private Genre genre;
+
+
 
     @PrePersist
     public void prePersist() {
@@ -65,14 +55,26 @@ public class User {
         updatedAt = OffsetDateTime.now();
     }
 
-    public User(int id) {
+    public ProductsGenre(int id) {
         this.id = id;
     }
 
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
+    public ProductsGenre(int productId, int genreId) {
+        this.product = new Product(productId);
+        this.genre = new Genre(genreId);
     }
 
+    public ProductsGenre(Product product, Genre genre) {
+        this.product = product;
+        this.genre = genre;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductsGenre{" +
+                "id=" + id +
+                ", product=" + product.getId() +
+                ", genre=" + genre.getId() +
+                '}';
+    }
 }

@@ -1,14 +1,12 @@
 package com.booleanuk.musicwebstorebackend.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -17,22 +15,15 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "orders")
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "password")
-    private String password;
+    @Column(name = "date")
+    private OffsetDateTime date;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @Column
@@ -43,15 +34,17 @@ public class User {
     private OffsetDateTime updatedAt;
 
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties("user")
-    private List<Review> reviews;
+    @OneToMany(mappedBy = "order")
+    @JsonIgnoreProperties("order")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<OrderLine> orderLine;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIncludeProperties(value = {"id", "name", "email"})
-    private Role role;
+    @JsonIncludeProperties(value = {"name", "email", "password"})
+    private User user;
+
 
     @PrePersist
     public void prePersist() {
@@ -65,14 +58,12 @@ public class User {
         updatedAt = OffsetDateTime.now();
     }
 
-    public User(int id) {
-        this.id = id;
+    public Order(OffsetDateTime date) {
+        this.date = date;
     }
 
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
+    public Order(int id) {
+        this.id = id;
     }
 
 }

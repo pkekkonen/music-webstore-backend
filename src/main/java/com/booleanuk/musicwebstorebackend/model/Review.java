@@ -1,10 +1,9 @@
 package com.booleanuk.musicwebstorebackend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,41 +16,38 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "reviews")
+public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "password")
-    private String password;
+    @Column(name = "content")
+    private String content;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @Column
     private OffsetDateTime createdAt;
 
+
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @Column
     private OffsetDateTime updatedAt;
 
-
-    @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties("user")
-    private List<Review> reviews;
-
-    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonIncludeProperties(value = {"id", "name", "email"})
-    private Role role;
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties("review")
+    @JsonIncludeProperties(value = {"name", "email", "password"})
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    @JsonIgnoreProperties("review")
+    @JsonIncludeProperties(value = {"title", "release_year", "price"})
+    private Product product;
+
+
 
     @PrePersist
     public void prePersist() {
@@ -65,14 +61,12 @@ public class User {
         updatedAt = OffsetDateTime.now();
     }
 
-    public User(int id) {
+    public Review(int id) {
         this.id = id;
     }
 
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
+    public Review(String content) {
+        this.content = content;
     }
 
 }

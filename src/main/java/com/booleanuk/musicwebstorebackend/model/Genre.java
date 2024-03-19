@@ -1,10 +1,8 @@
 package com.booleanuk.musicwebstorebackend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,22 +15,16 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "genres")
+public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
+
 
     @Column(name = "name")
     private String name;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "password")
-    private String password;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @Column
@@ -42,16 +34,15 @@ public class User {
     @Column
     private OffsetDateTime updatedAt;
 
+    @OneToMany(mappedBy = "genre")
+    @JsonIgnoreProperties("genre")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<ProductsGenre> productGenres;
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties("user")
-    private List<Review> reviews;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonIncludeProperties(value = {"id", "name", "email"})
-    private Role role;
+    public Genre(String name) {
+        this.name = name;
+    }
 
     @PrePersist
     public void prePersist() {
@@ -65,14 +56,17 @@ public class User {
         updatedAt = OffsetDateTime.now();
     }
 
-    public User(int id) {
+    public Genre(int id) {
         this.id = id;
     }
 
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
+    @Override
+    public String toString() {
+        return "Genre{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", productGenres=" + productGenres +
+                '}';
     }
-
 }
+
