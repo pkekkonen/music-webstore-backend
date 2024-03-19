@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "record_company")
+@Table(name = "record_companies")
 public class RecordCompany {
 
     @Id
@@ -34,8 +34,8 @@ public class RecordCompany {
     @Column
     private OffsetDateTime updatedAt;
 
-    @OneToMany(mappedBy = "record_company")
-    @JsonIgnoreProperties("record_company")
+    @OneToMany(mappedBy = "recordCompany")
+    @JsonIgnoreProperties("recordCompany")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Product> product;
 

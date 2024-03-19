@@ -86,4 +86,18 @@ public class Product {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", releaseYear='" + releaseYear + '\'' +
+                ", price=" + price +
+                ", recordCompany=" + recordCompany +
+                ", artist=" + artist +
+                ", productGenre=" + productGenre +
+                ", orderLines=" + orderLines +
+                ", reviews=" + reviews +
+                '}';
+    }
 }

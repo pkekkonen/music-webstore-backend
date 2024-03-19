@@ -1,8 +1,10 @@
 package com.booleanuk.musicwebstorebackend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,7 +47,11 @@ public class User {
     @JsonIgnoreProperties("user")
     private List<Review> reviews;
 
-
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIncludeProperties(value = {"id", "name", "email"})
+    private Role role;
 
     @PrePersist
     public void prePersist() {
