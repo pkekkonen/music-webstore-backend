@@ -27,13 +27,12 @@ public class RecordCompany {
 
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    @Column(name = "createdAt")
+    @Column
     private OffsetDateTime createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    @Column(name = "updatedAt")
+    @Column
     private OffsetDateTime updatedAt;
-
 
     @OneToMany(mappedBy = "recordCompany")
     @JsonIgnoreProperties("recordCompany")

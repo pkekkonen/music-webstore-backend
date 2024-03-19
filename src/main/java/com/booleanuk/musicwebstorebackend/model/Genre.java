@@ -61,6 +61,13 @@ public class Genre {
         this.id = id;
     }
 
-
+    @Override
+    public String toString() {
+        return "Genre{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", productGenres=" + productGenres +
+                '}';
+    }
 }
 

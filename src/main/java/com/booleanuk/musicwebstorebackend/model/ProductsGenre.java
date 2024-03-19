@@ -59,4 +59,23 @@ public class ProductsGenre {
     public ProductsGenre(int id) {
         this.id = id;
     }
+
+    public ProductsGenre(int productId, int genreId) {
+        this.product = new Product(productId);
+        this.genre = new Genre(genreId);
+    }
+
+    public ProductsGenre(Product product, Genre genre) {
+        this.product = product;
+        this.genre = genre;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductsGenre{" +
+                "id=" + id +
+                ", product=" + product.getId() +
+                ", genre=" + genre.getId() +
+                '}';
+    }
 }
