@@ -37,7 +37,7 @@ public class RecordCompany {
     @OneToMany(mappedBy = "recordCompany")
     @JsonIgnoreProperties("recordCompany")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private List<Product> product;
+    private List<Product> products;
 
 
     public RecordCompany(int id) {
