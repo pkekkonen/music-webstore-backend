@@ -1,8 +1,8 @@
 package com.booleanuk.musicwebstorebackend.controller;
 
-import com.booleanuk.musicwebstorebackend.mapper.UserMapper;
 import com.booleanuk.musicwebstorebackend.model.User;
 import com.booleanuk.musicwebstorebackend.model.UserDTO;
+import com.booleanuk.musicwebstorebackend.repository.RoleRepository;
 import com.booleanuk.musicwebstorebackend.repository.UserRepository;
 import com.booleanuk.musicwebstorebackend.response.ErrorResponse;
 import com.booleanuk.musicwebstorebackend.response.Response;
@@ -21,22 +21,17 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    private final UserMapper userMapper;
-
     @Autowired
-    public UserController(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
-
+    private RoleRepository roleRepository;
     @GetMapping
         public ResponseEntity<Response<List<UserDTO>>> getAllProducts() {
-            List<UserDTO> allProducts = this.userRepository.findAll().stream().map(userMapper::toDto).toList();
+            List<UserDTO> allProducts = this.userRepository.findAll().stream().map(this::toDto).toList();
             return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse<>(allProducts));
         }
 
     @GetMapping("/{id}")
     public ResponseEntity<Response<?>> getUser(@PathVariable int id) {
-        UserDTO user = userMapper.toDto(findUser(id));
+        UserDTO user = this.toDto(findUser(id));
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User not found"));
@@ -46,11 +41,11 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Response<?>> createUser(@RequestBody UserDTO userDTO) {
-        User user = userMapper.toEntity(userDTO);
+        User user = this.toEntity(userDTO);
         if (containsNull(user)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Bad request"));
         }
-        Response<UserDTO> res = new SuccessResponse<>(userMapper.toDto(userRepository.save(user)));
+        Response<UserDTO> res = new SuccessResponse<>(this.toDto(userRepository.save(user)));
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
@@ -61,7 +56,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User not found"));
         }
 
-        User userUpdated = userMapper.toEntity(userDTO);
+        User userUpdated = this.toEntity(userDTO);
 
         if(userUpdated.getName() != null ) {
             userToUpdate.setName(userUpdated.getName());
@@ -77,7 +72,7 @@ public class UserController {
         }
 
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>(userMapper.toDto(userRepository.save(userToUpdate))));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>(this.toDto(userRepository.save(userToUpdate))));
     }
 
     @DeleteMapping("/{id}")
@@ -88,7 +83,7 @@ public class UserController {
         }
 
         userRepository.delete(userToDelete);
-        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse<>(userMapper.toDto(userToDelete)));
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse<>(this.toDto(userToDelete)));
     }
 
     private boolean containsNull(User user) {
@@ -97,6 +92,26 @@ public class UserController {
 
     private User findUser(int id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    public UserDTO toDto(User user) {
+        return new UserDTO(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getRole() != null ? user.getRole().getTitle() : null
+        );
+    }
+
+    public User toEntity(UserDTO userDTO) {
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setName(userDTO.getName());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(userDTO.getPassword());
+        user.setRole(roleRepository.findByTitle(userDTO.getRole()));
+        return user;
     }
 
 }
