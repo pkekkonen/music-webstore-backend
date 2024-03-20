@@ -1,13 +1,12 @@
 package com.booleanuk.musicwebstorebackend.controller;
 
-import com.booleanuk.musicwebstorebackend.model.Artist;
 import com.booleanuk.musicwebstorebackend.model.User;
 import com.booleanuk.musicwebstorebackend.model.UserDTO;
 import com.booleanuk.musicwebstorebackend.repository.RoleRepository;
 import com.booleanuk.musicwebstorebackend.repository.UserRepository;
-import com.booleanuk.musicwebstorebackend.response.ErrorResponse;
-import com.booleanuk.musicwebstorebackend.response.Response;
-import com.booleanuk.musicwebstorebackend.response.SuccessResponse;
+import com.booleanuk.musicwebstorebackend.payload.response.ErrorResponse;
+import com.booleanuk.musicwebstorebackend.payload.response.Response;
+import com.booleanuk.musicwebstorebackend.payload.response.SuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -111,7 +110,7 @@ public class UserController {
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
-        user.setRole(roleRepository.findByTitle(userDTO.getRole()));
+        user.setRole(roleRepository.findByTitle(userDTO.getRole()).orElseThrow(() -> new RuntimeException("Error: role is not found")));
         return user;
     }
 

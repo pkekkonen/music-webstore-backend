@@ -1,0 +1,70 @@
+Admin
+-username: string
+-password: string
++editProduct()
++addProduct()
++removeProduct()
+
+Items
+-id
+-name
+-category
+User
+-username: string
+-password: string
+-email: string
+-orederHistory: List<Order>
+-wishList: List<Product>
++login()
++browseProduct()
++searchProducts(String keyword)
++viewProductDiscription(Product product)
++logout()
++signUp()
++addToCart(Product product)
++removeFromCart(Product product)
++checkoutCart()
++leaveReview(Product product, String review)
++filterProducts(Filter[] filters)
++sortProduct(SortCriteria sortBy)
++getReceipt(Order order)
+shareProduct(Product product)
+
+Product
+-productId: string
+-name: string
+-description: string
+-price: double
+-stock: int
+-reviews: List<Reviews>
++getProductDetails()
++addReview(Review review)
+
+Review
+-reviewId: string
+-user: User
+-product: Product
+-rating: int
+-comment: string
++getRating()
++getComment()
+
+Order
+-orderId: string
+-products: List<Products>
+-totalPrice: double
+-status: string
++getOrderDetails()
++addProducts(Product product)
++removeProduct(Product product)
++updateStatus(String newStatus)
+
+Filter
+-filterType: string
+-filterValue: string
++applyFilter(List<Product> products): List<Product>
+
+SortCriteria
+-sortType: string
++applySort(List<Product> products): List<Product>
+	
