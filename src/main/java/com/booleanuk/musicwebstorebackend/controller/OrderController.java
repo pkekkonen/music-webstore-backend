@@ -86,6 +86,7 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("not found"));
         }
         order.setUser(user);
+        order.setOrderLine(new ArrayList<>());
         Order createdOrder = orderRepository.save(order);
 
         Response<Order> response = new SuccessResponse<>(createdOrder);
