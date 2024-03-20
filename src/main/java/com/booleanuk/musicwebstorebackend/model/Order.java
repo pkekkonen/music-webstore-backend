@@ -45,7 +45,6 @@ public class Order {
     @JsonIncludeProperties(value = {"name", "email", "password"})
     private User user;
 
-
     @PrePersist
     public void prePersist() {
         OffsetDateTime now = OffsetDateTime.now();
