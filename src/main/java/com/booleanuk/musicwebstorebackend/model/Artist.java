@@ -26,11 +26,11 @@ public class Artist {
     private String name;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    @Column
+    @Column(name = "createdAt")
     private OffsetDateTime createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    @Column
+    @Column(name = "updatedAt")
     private OffsetDateTime updatedAt;
 
     @OneToMany(mappedBy = "artist")
