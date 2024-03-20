@@ -55,6 +55,10 @@ public class User {
     @JsonIgnoreProperties("user")
     private List<Review> reviews;
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties("user")
+    private List<Order> orders;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)

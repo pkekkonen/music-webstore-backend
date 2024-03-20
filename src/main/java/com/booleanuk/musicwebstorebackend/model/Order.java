@@ -35,8 +35,8 @@ public class Order {
 
 
     @OneToMany(mappedBy = "order")
-    @JsonIgnoreProperties("order")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  @JsonIgnoreProperties("order")
+ // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<OrderLine> orderLine;
 
     @JsonIgnore
@@ -44,7 +44,6 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIncludeProperties(value = {"name", "email", "password"})
     private User user;
-
 
     @PrePersist
     public void prePersist() {
