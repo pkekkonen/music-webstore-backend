@@ -270,7 +270,72 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error404'
-
+  /users/{userId}/currentOrder:
+    get:
+      tags:
+        - orders
+      summary: Get current (open) order
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user to get the order for
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description:  Successfully got the current order
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '404':
+          description: No user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        '400':
+          description: User has no open order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+  /users/{userId}/currentOrder/checkout:
+    put:
+      tags:
+        - orders
+      summary: Checkout current (open) order
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user to checkout the order for
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description:  Successfully checked-out the current order
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '404':
+          description: No user with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        '400':
+          description: User has no open order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
   /users/{userId}/orders:
     get:
       tags:

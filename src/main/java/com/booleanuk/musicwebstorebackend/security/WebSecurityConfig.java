@@ -60,12 +60,12 @@ public class WebSecurityConfig {
                 .exceptionHandling((exception) -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
-                                .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-                                .requestMatchers(HttpMethod.PUT,"/users/{userId}/orders/{id}").access(new WebExpressionAuthorizationManager("#id == authentication.id and hasRole('USER')"))
+                                .requestMatchers("/**").permitAll()
+//                                .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
+//                                .requestMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN")
+//                                .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
+//                                .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+//                                .requestMatchers(HttpMethod.PUT,"/users/{userId}/orders/{id}").access(new WebExpressionAuthorizationManager("#id == authentication.id and hasRole('USER')"))
                                 // ETC......
                                 // TODO: ADD ALL REQUEST MATCHERS
                 );
