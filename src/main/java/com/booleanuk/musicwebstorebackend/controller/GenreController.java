@@ -2,9 +2,9 @@ package com.booleanuk.musicwebstorebackend.controller;
 
 import com.booleanuk.musicwebstorebackend.model.Genre;
 import com.booleanuk.musicwebstorebackend.repository.GenreRepository;
-import com.booleanuk.musicwebstorebackend.response.ErrorResponse;
-import com.booleanuk.musicwebstorebackend.response.Response;
-import com.booleanuk.musicwebstorebackend.response.SuccessResponse;
+import com.booleanuk.musicwebstorebackend.payload.response.ErrorResponse;
+import com.booleanuk.musicwebstorebackend.payload.response.Response;
+import com.booleanuk.musicwebstorebackend.payload.response.SuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
