@@ -1,7 +1,10 @@
 package com.booleanuk.musicwebstorebackend.controller;
 
 import com.booleanuk.musicwebstorebackend.model.Genre;
+import com.booleanuk.musicwebstorebackend.payload.response.ErrorResponse;
 import com.booleanuk.musicwebstorebackend.repository.GenreRepository;
+import com.booleanuk.musicwebstorebackend.payload.response.Response;
+import com.booleanuk.musicwebstorebackend.payload.response.SuccessResponse;
 import com.booleanuk.musicwebstorebackend.payload.response.ErrorResponse;
 import com.booleanuk.musicwebstorebackend.payload.response.Response;
 import com.booleanuk.musicwebstorebackend.payload.response.SuccessResponse;
