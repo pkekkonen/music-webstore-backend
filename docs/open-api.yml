@@ -9,11 +9,8 @@ tags:
   - name: products
   - name: users
   - name: orders
-  - name: order_lines
   - name: reviews
   - name: genres
-  - name: record_companies
-  - name: artists
 paths:
   /products:
     get:
@@ -443,208 +440,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error404'
 
-  /orders/{orderId}/products/{productId}/orderlines:
-    get:
-      tags:
-        - order_lines
-      summary: Get all order lines
-      parameters:
-        - name: orderId
-          in: path
-          description: The ID of the order
-          required: true
-          schema:
-            type: integer
-        - name: productId
-          in: path
-          description: The ID of the product
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description:  Successfully got all the order lines
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/OrderLine'
-        '404':
-          description: No order or product with that ID found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-    post:
-      tags:
-        - order_lines
-      summary: Create a new order line
-      parameters:
-        - name: orderId
-          in: path
-          description: The ID of the order
-          required: true
-          schema:
-            type: integer
-        - name: productId
-          in: path
-          description: The ID of the product
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateOrderLine'
-      responses:
-        '201':
-          description: Successfully created the order line
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderLine'
-        '400':
-          description: Could not create a new order line, please check all fields are correct.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '404':
-          description: No order or product with that ID found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
 
-  /orders/{orderId}/products/{productId}/order_lines/{id}:
-    get:
-      tags:
-        - order_lines
-      summary: Get a specified order line
-      operationId: getOrderLine
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the order line to get
-          required: true
-          schema:
-            type: integer
-        - name: orderId
-          in: path
-          description: The ID of the order
-          required: true
-          schema:
-            type: integer
-        - name: productId
-          in: path
-          description: The ID of the product
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Successfully got the specified order line
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderLine'
-        '404':
-          description: No order, product or order line with that ID found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-    put:
-      tags:
-        - order_lines
-      summary: Update an order line
-      description: Update an existing order line. Any combination of fields may be provided.
-      operationId: updateOrderLine
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the order line to update
-          required: true
-          schema:
-            type: integer
-        - name: orderId
-          in: path
-          description: The ID of the order
-          required: true
-          schema:
-            type: integer
-        - name: productId
-          in: path
-          description: The ID of the product
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateOrderLine'
-      responses:
-        '200':
-          description: Successfully updated the specified order line
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderLine'
-        '400':
-          description: Could not update the order line, please check all fields are correct.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '404':
-          description: No order, product or order line with that ID found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-    delete:
-      tags:
-        - order_lines
-      summary: Delete an order line
-      description: Delete an existing order line.
-      operationId: deleteOrderLine
-      parameters:
-        - name: id
-          in: path
-          description: The ID of the order line to delete
-          required: true
-          schema:
-            type: integer
-        - name: orderId
-          in: path
-          description: The ID of the order
-          required: true
-          schema:
-            type: integer
-        - name: productId
-          in: path
-          description: The ID of the product
-          required: true
-          schema:
-            type: integer
-
-      responses:
-        '200':
-          description: Successfully deleted the specified order line
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderLine'
-        '404':
-          description: No order, product or order line with that ID found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
   /products/{productId}/users/{userId}/reviews:
     get:
       tags:
@@ -974,6 +770,135 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error404'
+
+  /products_genres:
+    get:
+      tags:
+        - products_genres
+      summary: Get all product-genre associations
+      responses:
+        '200':
+          description:  Successfully got all the product-genre associations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductGenre'
+    post:
+      tags:
+        - products_genres
+      summary: Create a new product-genre association
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductGenre'
+      responses:
+        '201':
+          description: Successfully created the product-genre association
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGenre'
+        '400':
+          description: Could not create a new product-genre association, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+
+  /products_genres/{id}:
+    get:
+      tags:
+        - products_genres
+      summary: Get a specified product-genre association
+      operationId: getProductGenre
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the product-genre association to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully got the specified product-genre association
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGenre'
+        '404':
+          description: No product-genre association with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    put:
+      tags:
+        - products_genres
+      summary: Update a product-genre association
+      description: Update an existing product-genre association. Any combination of fields may be provided.
+      operationId: updateProductGenre
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the product-genre association to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductGenre'
+      responses:
+        '200':
+          description: Successfully updated the specified product-genre association
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGenre'
+        '400':
+          description: Could not update the product-genre association, please check all fields are correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '404':
+          description: No product-genre association with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+    delete:
+      tags:
+        - products_genres
+      summary: Delete a product-genre association
+      description: Delete an existing product-genre association.
+      operationId: deleteProductGenre
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the product-genre association to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified product-genre association
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGenre'
+        '404':
+          description: No product-genre association with that ID found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+
   /record_companies:
     get:
       tags:
@@ -1238,29 +1163,30 @@ components:
           type: integer
           format: int64
           description: The unique identifier for the product
+        recordCompany:
+          type: string
+          description: The name of the record company for the product
+        artist:
+          type: string
+          description: The name of the artist for the product
         title:
           type: string
           description: The title of the product
-        artist:
-          type: string
-          description: The artist of the product
-        recordCompany:
-          type: string
-          description: The record company of the product
         releaseYear:
           type: string
           description: The release year of the product
         price:
           type: number
+          format: double
           description: The price of the product
         genres:
           type: array
           items:
             type: string
-          description: List of genres associated with the product
+          description: The genre/genres of the product
       required:
-        - companyId
-        - artistId
+        - recordCompany
+        - artist
         - title
         - releaseYear
         - price
@@ -1268,29 +1194,34 @@ components:
     CreateProduct:
       type: object
       properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the product
+        recordCompany:
+          type: string
+          description: The name of the record company for the product
+        artist:
+          type: string
+          description: The name of the artist for the product
         title:
           type: string
           description: The title of the product
-        artist:
-          type: string
-          description: The artist of the product
-        recordCompany:
-          type: string
-          description: The record company of the product
         releaseYear:
           type: string
           description: The release year of the product
         price:
           type: number
+          format: double
           description: The price of the product
         genres:
           type: array
           items:
             type: string
-          description: List of genres associated with the product
+          description: The genre/genres of the product
       required:
-        - companyId
-        - artistId
+        - recordCompany
+        - artist
         - title
         - releaseYear
         - price
@@ -1298,29 +1229,33 @@ components:
     UpdateProduct:
       type: object
       properties:
+        recordCompany:
+          type: string
+          description: The name of the record company for the product
+        artist:
+          type: string
+          description: The name of the artist for the product
         title:
           type: string
           description: The title of the product
-        artist:
-          type: string
-          description: The artist of the product
-        recordCompany:
-          type: string
-          description: The record company of the product
         releaseYear:
           type: string
           description: The release year of the product
         price:
           type: number
+          format: double
           description: The price of the product
         genres:
           type: array
           items:
             type: string
-          description: List of genres associated with the product
     CreateUser:
       type: object
       properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the user
         name:
           type: string
           description: The name of the user
@@ -1417,40 +1352,6 @@ components:
       required:
         - userId
         - date
-    CreateOrderLine:
-      type: object
-      properties:
-        quantity:
-          type: integer
-          description: The quantity of the product in the order line
-      required:
-        - quantity
-    UpdateOrderLine:
-      type: object
-      properties:
-        quantity:
-          type: integer
-          description: The quantity of the product in the order line
-    OrderLine:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: The unique identifier for the order line
-        productId:
-          type: integer
-          description: The foreign key to the product in the order line
-        orderId:
-          type: integer
-          description: The foreign key to the order to which the order line belongs
-        quantity:
-          type: integer
-          description: The quantity of the product in the order line
-      required:
-        - productId
-        - orderId
-        - quantity
     CreateReview:
       type: object
       properties:
@@ -1501,6 +1402,42 @@ components:
       properties:
         name:
           type: string
+    ProductGenre:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        product_id:
+          type: integer
+          format: int64
+        genre_id:
+          type: integer
+          format: int64
+      required:
+        - product_id
+        - genre_id
+    CreateProductGenre:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          format: int64
+        genre_id:
+          type: integer
+          format: int64
+      required:
+        - product_id
+        - genre_id
+    UpdateProductGenre:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          format: int64
+        genre_id:
+          type: integer
+          format: int64
     RecordCompany:
       type: object
       properties:
@@ -1529,8 +1466,6 @@ components:
         id:
           type: integer
           format: int64
-        name:
-          type: string
         record_company_id:
           type: integer
           format: int64
@@ -1540,8 +1475,6 @@ components:
     CreateArtist:
       type: object
       properties:
-        name:
-          type: string
         record_company_id:
           type: integer
           format: int64
@@ -1551,8 +1484,6 @@ components:
     UpdateArtist:
       type: object
       properties:
-        name:
-          type: string
         record_company_id:
           type: integer
           format: int64
