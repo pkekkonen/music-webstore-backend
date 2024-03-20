@@ -35,8 +35,8 @@ public class Order {
 
 
     @OneToMany(mappedBy = "order")
-    @JsonIgnoreProperties("order")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  @JsonIgnoreProperties("order")
+ // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<OrderLine> orderLine;
 
     @JsonIgnore
