@@ -66,14 +66,8 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT,"/users/{userId}/orders/{id}").access(new WebExpressionAuthorizationManager("#id == authentication.id and hasRole('USER')"))
-
-                        //.requestMatchers(HttpMethod.PUT, HttpMethod.POST, HttpMethod.GET, "/{name}/orders/{id}").access(new WebExpressionAuthorizationManager("#name == authentication.name and hasRole('USER')"))
-//                        .requestMatchers(HttpMethod.GET, "/items").hasRole("USER")
-//                        .requestMatchers(HttpMethod.POST, "/users/{name}/items/{itemId}").access(new WebExpressionAuthorizationManager("#name == authentication.name and hasRole('USER')"))
-//                        .requestMatchers(HttpMethod.PUT, "/{name}/loans/{id}").access(new WebExpressionAuthorizationManager("#name == authentication.name and hasRole('USER')"))
-//                        .requestMatchers(HttpMethod.GET, "/users/{name}/loans").access(new WebExpressionAuthorizationManager("#name == authentication.name and hasRole('USER') or hasRole('ADMIN')"))
-//                        .requestMatchers("/items/**").hasRole("ADMIN")
-//                        .requestMatchers(HttpMethod.GET, "/items/{itemId}/loans").hasRole("ADMIN")
+                                // ETC......
+                                // TODO: ADD ALL REQUEST MATCHERS
                 );
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
