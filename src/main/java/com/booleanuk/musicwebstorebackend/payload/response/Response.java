@@ -1,4 +1,4 @@
-package com.booleanuk.musicwebstorebackend.response;
+package com.booleanuk.musicwebstorebackend.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
