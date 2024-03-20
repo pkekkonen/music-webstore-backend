@@ -60,9 +60,13 @@ public class WebSecurityConfig {
                 .exceptionHandling((exception) -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
-                                .requestMatchers("/**").permitAll()
-//                                .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
-//                                .requestMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN")
+                                .requestMatchers("/").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/products/**").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/users/{userId/orders/**}").access(new WebExpressionAuthorizationManager("#userId == authentication.id and hasRole('GUEST')"))
+                                .requestMatchers(HttpMethod.POST,"/users/{userId/orders/**}").access(new WebExpressionAuthorizationManager("#userId == authentication.id and hasRole('USER')"))
+                                .requestMatchers(HttpMethod.PUT,"/users/{userId/orders/**}").access(new WebExpressionAuthorizationManager("#userId == authentication.id and hasRole('USER')"))
+                                .requestMatchers("/**").hasRole("ADMIN")
+
 //                                .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
 //                                .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
 //                                .requestMatchers(HttpMethod.PUT,"/users/{userId}/orders/{id}").access(new WebExpressionAuthorizationManager("#id == authentication.id and hasRole('USER')"))
