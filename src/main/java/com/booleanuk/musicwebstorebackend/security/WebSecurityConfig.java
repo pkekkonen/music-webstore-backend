@@ -68,7 +68,6 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.PUT,"/users/{userId}/orders/{id}").access(new WebExpressionAuthorizationManager("#id == authentication.id and hasRole('USER')"))
 
                         //.requestMatchers(HttpMethod.PUT, HttpMethod.POST, HttpMethod.GET, "/{name}/orders/{id}").access(new WebExpressionAuthorizationManager("#name == authentication.name and hasRole('USER')"))
-
 //                        .requestMatchers(HttpMethod.GET, "/items").hasRole("USER")
 //                        .requestMatchers(HttpMethod.POST, "/users/{name}/items/{itemId}").access(new WebExpressionAuthorizationManager("#name == authentication.name and hasRole('USER')"))
 //                        .requestMatchers(HttpMethod.PUT, "/{name}/loans/{id}").access(new WebExpressionAuthorizationManager("#name == authentication.name and hasRole('USER')"))

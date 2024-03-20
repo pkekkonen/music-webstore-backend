@@ -1,4 +1,4 @@
-package com.booleanuk.musicwebstorebackend.response;
+package com.booleanuk.musicwebstorebackend.payload.response;
 
 public class SuccessResponse<T> extends Response<T>{
 
