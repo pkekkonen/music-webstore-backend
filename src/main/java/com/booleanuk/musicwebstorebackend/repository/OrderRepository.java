@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Integer>{
 
-    Optional<Order> findByUserAndDate(User user, OffsetDateTime date);
+    Optional<Order> findFirstByUserAndDate(User user, OffsetDateTime date);
 
     List<Order> findAllByUser(User user);
 
