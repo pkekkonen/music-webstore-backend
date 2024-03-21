@@ -39,6 +39,17 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse<>(user));
     }
 
+    @GetMapping("/guest")
+    public ResponseEntity<Response<?>> getGuestUser() {
+        UserDTO user = this.toDto(findUser(37));
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User not found"));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse<>(user));
+    }
+
+
     @PostMapping
     public ResponseEntity<Response<?>> createUser(@RequestBody UserDTO userDTO) {
         User user = this.toEntity(userDTO);

@@ -11,10 +11,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
+
+    public int getIdFromUsername(String username) {
+        User user = userRepository.findByEmail(username).orElseThrow(() ->
+                new UsernameNotFoundException("User not found with username " + username));
+        return user.getId();
+    }
 
     @Override
     @Transactional
