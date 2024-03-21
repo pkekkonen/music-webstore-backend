@@ -37,7 +37,7 @@ public class OrderLine {
     @ManyToOne
     @JoinColumn(name = "product_id")
     @JsonIgnoreProperties("order_line")
-    @JsonIncludeProperties(value = {"title", "release_year", "price"})
+    @JsonIncludeProperties(value = {"title", "release_year", "price", "id"})
     private Product product;
 
     @JsonIgnore
@@ -58,4 +58,5 @@ public class OrderLine {
     public void preUpdate() {
         updatedAt = OffsetDateTime.now();
     }
+
 }
