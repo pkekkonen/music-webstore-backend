@@ -70,12 +70,5 @@ public class ProductsGenre {
         this.genre = genre;
     }
 
-    @Override
-    public String toString() {
-        return "ProductsGenre{" +
-                "id=" + id +
-                ", product=" + product.getId() +
-                ", genre=" + genre.getId() +
-                '}';
-    }
+
 }
