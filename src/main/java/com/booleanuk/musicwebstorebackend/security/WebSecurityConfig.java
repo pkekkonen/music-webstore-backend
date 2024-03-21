@@ -64,11 +64,12 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.GET,"/users/guest").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET,"/products").permitAll()
-                                .requestMatchers(HttpMethod.POST,"/users/{userId}/orders").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,"/products/**").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/users/{userId}/orders").permitAll()
                                 .requestMatchers(HttpMethod.PUT,"/users/{userId}/orders/**").authenticated()
                                 .requestMatchers(HttpMethod.PUT,"/users/{userId}/currentOrder/checkout").permitAll()
                                 .requestMatchers(HttpMethod.GET,"/users/{userId}/currentOrder").authenticated()
-                                .requestMatchers("/**").hasRole("ADMIN")
+
                 );
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
