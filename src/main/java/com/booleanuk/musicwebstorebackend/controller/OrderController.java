@@ -42,7 +42,7 @@ public class OrderController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("No user with this ID exists"));
         }
-        Order order = orderRepository.findByUserAndDate(user, null).orElse(null);
+        Order order = orderRepository.findFirstByUserAndDate(user, null).orElse(null);
 
         if (order == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("User has no open order"));
@@ -57,7 +57,7 @@ public class OrderController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("No user with this ID exists"));
         }
-        Order order = orderRepository.findByUserAndDate(user, null).orElse(null);
+        Order order = orderRepository.findFirstByUserAndDate(user, null).orElse(null);
 
         if (order == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("User has no open order"));
@@ -129,6 +129,10 @@ public class OrderController {
             List<OrderLine> newOrderLines = order.getOrderLine();
             for (OrderLine orderLine : newOrderLines) {
                 OrderLine newOrderLine = new OrderLine();
+
+                System.out.println("ORDERLINEEEE    " + orderLine);
+
+                System.out.println("PRODUCTTTTT    " + orderLine.getProduct());
 
                 int product_id = orderLine.getProduct().getId();
                 System.out.println(product_id);
