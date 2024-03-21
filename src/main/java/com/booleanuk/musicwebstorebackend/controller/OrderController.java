@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +52,21 @@ public class OrderController {
 
         return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse<>(order));
     }
+
+    @GetMapping("/{userId}/orders/{order_id}/receipt")
+    public ResponseEntity<Response<?>> getOrderReceipt(@PathVariable int userId, @PathVariable int order_id) {
+        Order order = findOrder(order_id);
+        if (order == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Order not found"));
+        }
+
+        Order order1 = findOrder(order_id);
+        List<OrderLine> orderLines = findOrderLinesByOrderId(order_id);
+        String receipt = generateReceipt(order1,orderLines);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse<>(receipt));
+    }
+
 
     @PutMapping("/{id}/currentOrder/checkout")
     public ResponseEntity<Response<?>> checkoutCurrentOrder(@PathVariable int id) {
@@ -110,7 +127,7 @@ public class OrderController {
 
     @PutMapping("/{id}/orders/{order_id}")
     public ResponseEntity<Response<?>> updateOrder(@PathVariable int id, @PathVariable int order_id,
-            @RequestBody Order order) {
+                                                   @RequestBody Order order) {
         Order orderToUpdate = findOrder(order_id);
         if (orderToUpdate == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("not found"));
@@ -134,7 +151,7 @@ public class OrderController {
                 System.out.println(product_id);
                 Product p = productRepository.findById(product_id).orElse(null);
                 System.out.println(p);
-                if(p == null){
+                if (p == null) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("not found"));
 
                 }
@@ -155,5 +172,39 @@ public class OrderController {
     private Order findOrder(int id) {
         return orderRepository.findById(id).orElse(null);
     }
+    public List<OrderLine> findOrderLinesByOrderId(int orderId) {
+        return orderLineRepository.findByOrderId(orderId);
+    }
 
+    public String generateReceipt(Order order, List<OrderLine> orderLines) {
+        StringBuilder receipt = new StringBuilder();
+        DecimalFormat df = new DecimalFormat("#.##");
+
+        int id = order.getId();
+        OffsetDateTime date = order.getDate();
+
+        receipt.append("Receipt for Order #" + id + " ");
+        if (date != null) {
+            receipt.append("Date: " + date + " ");
+        }
+        receipt.append("Receipt for Order ");
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (OrderLine orderLine : orderLines) {
+            Product product = orderLine.getProduct();
+            if (product != null) {
+                BigDecimal price = BigDecimal.valueOf(product.getPrice());
+                int quantity = orderLine.getQuantity();
+                BigDecimal lineTotal = price.multiply(BigDecimal.valueOf(quantity));
+
+                receipt.append(product.getTitle() + " - $" + df.format(price) + " x " + quantity);
+                total = total.add(lineTotal);
+            }
+        }
+
+        receipt.append(" Total: $" + df.format(total));
+
+        return receipt.toString();
+    }
 }
