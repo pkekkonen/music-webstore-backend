@@ -86,8 +86,28 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("not found"));
         }
         order.setUser(user);
-        order.setOrderLine(new ArrayList<>());
+
         Order createdOrder = orderRepository.save(order);
+
+        List<OrderLine> allOrderLines = new ArrayList<>();
+        if(order.getOrderLine() != null){
+            for (OrderLine orderLine : order.getOrderLine()) {
+                OrderLine newOrderLine = new OrderLine();
+                int product_id = orderLine.getProduct().getId();
+                Product p = productRepository.findById(product_id).orElse(null);
+                if (p == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("not found"));
+                }
+                newOrderLine.setProduct(p);
+                newOrderLine.setOrder(order);
+                newOrderLine.setQuantity(orderLine.getQuantity());
+                allOrderLines.add(orderLineRepository.save(newOrderLine));
+            }
+        }
+
+        order.setOrderLine(allOrderLines);
+
+        orderRepository.save(order);
 
         Response<Order> response = new SuccessResponse<>(createdOrder);
 
@@ -129,11 +149,6 @@ public class OrderController {
             List<OrderLine> newOrderLines = order.getOrderLine();
             for (OrderLine orderLine : newOrderLines) {
                 OrderLine newOrderLine = new OrderLine();
-
-                System.out.println("ORDERLINEEEE    " + orderLine);
-
-                System.out.println("PRODUCTTTTT    " + orderLine.getProduct());
-
                 int product_id = orderLine.getProduct().getId();
                 System.out.println(product_id);
                 Product p = productRepository.findById(product_id).orElse(null);
