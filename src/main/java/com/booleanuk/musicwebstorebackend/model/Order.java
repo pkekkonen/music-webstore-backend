@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -35,8 +37,8 @@ public class Order {
 
 
     @OneToMany(mappedBy = "order")
-  @JsonIgnoreProperties("order")
- // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonIgnoreProperties("order")
+    // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<OrderLine> orderLine;
 
     @JsonIgnore
@@ -64,5 +66,8 @@ public class Order {
     public Order(int id) {
         this.id = id;
     }
+
+
+
 
 }
