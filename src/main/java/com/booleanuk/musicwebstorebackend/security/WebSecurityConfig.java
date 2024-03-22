@@ -64,7 +64,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.GET,"/users/guest").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET,"/products").permitAll()
-                        .requestMatchers(HttpMethod.DELETE,"/products/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE,"/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,"/users/{userId}/orders").permitAll()
                                 .requestMatchers(HttpMethod.PUT,"/users/{userId}/orders/**").authenticated()
                                 .requestMatchers(HttpMethod.PUT,"/users/{userId}/currentOrder/checkout").permitAll()

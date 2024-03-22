@@ -17,24 +17,27 @@ public class UserDetailsImpl implements UserDetails {
 
     private int id;
     private String username;
+    private String email;
 
     @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(int id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(int id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
+        this.email = email;
         this.password = password;
         this.authorities = authorities;
     }
 
     public static UserDetailsImpl build(User user) {
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole().getTitle()));
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().getTitle()));
 
         return new UserDetailsImpl(user.getId(),
                 user.getEmail(),  //TODO: REMEMBER THAT USERNAME IS EMAIL
+                user.getEmail(),
                 user.getPassword(),
                 authorities);
     }
